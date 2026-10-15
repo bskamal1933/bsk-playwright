@@ -1,0 +1,48 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: "Environment (qa, staging)"
+        default: "qa"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [api, ui]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install browser
+        if: matrix.suite == 'ui'
+        run: playwright install --with-deps chromium
+
+      - name: Run ${{ matrix.suite }} tests
+        env:
+          API_PASSWORD: ${{ secrets.API_PASSWORD || 'password123' }}
+        run: >
+          pytest -m ${{ matrix.suite }}
+          --env=${{ inputs.env || 'qa' }}
+          -n auto --reruns 1
+
+      - name: Upload report and failure artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-${{ matrix.suite }}
+          path: reports/

@@ -1,0 +1,7 @@
+{
+  "ui_base_url": "https://www.saucedemo.com",
+  "api_base_url": "https://restful-booker.herokuapp.com",
+  "api_username": "admin",
+  "api_password": "password123",
+  "timeout_ms": 15000
+}

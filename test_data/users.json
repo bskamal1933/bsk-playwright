@@ -1,0 +1,10 @@
+{
+  "standard": {"username": "standard_user", "password": "secret_sauce"},
+  "locked_out": {"username": "locked_out_user", "password": "secret_sauce"},
+  "invalid_logins": [
+    {"id": "wrong-password", "username": "standard_user", "password": "wrong", "error": "Username and password do not match"},
+    {"id": "unknown-user", "username": "nobody", "password": "secret_sauce", "error": "Username and password do not match"},
+    {"id": "empty-username", "username": "", "password": "secret_sauce", "error": "Username is required"},
+    {"id": "empty-password", "username": "standard_user", "password": "", "error": "Password is required"}
+  ]
+}
